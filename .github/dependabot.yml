@@ -1,12 +1,12 @@
 version: 2
 updates:
-  # 1. Node.js / Remotion / Three.js dependencies
+  # 1. Node.js / Remotion / Three.js dependencies (locked to React 18 + R3F v8 major series)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     groups:
       remotion:
         patterns:
@@ -18,18 +18,34 @@ updates:
           - "@types/three"
           - "@react-three/*"
           - "three-custom-shader-material"
+      react18:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+    ignore:
+      # Keep React 18 & R3F v8/Drei v9 major series locked for Remotion + Three.js compatibility
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@react-three/fiber"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@react-three/drei"
+        update-types: ["version-update:semver-major"]
 
-  # 2. Python TTS, Whisper, Audio DSP & Diffusers dependencies
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    open-pull-requests-limit: 5
-
-  # 3. GitHub Actions workflows
+  # 2. GitHub Actions workflows (grouped into a single PR)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
