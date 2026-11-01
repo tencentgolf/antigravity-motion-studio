@@ -54,8 +54,8 @@ const INTRO_FEATURES: IntroFeature[] = [
   },
   {
     tag: 'BROADCAST AUDIO DSP',
-    title: 'Voice Blending & Auto-Ducking',
-    desc: 'Blend local Kokoro 82M voices or Edge Neural word timings with -8.5 dB sidechain music & SFX.',
+    title: 'Voice Blending, Cloning & Whisper',
+    desc: 'Blend Kokoro 82M voices, clone any voice (--clone-voice), or Whisper-align recordings (--audio-in) with -8.5 dB sidechain SFX.',
     module: 'scripts/tts.py + sfx.py',
     accent: '#34d399',
   },
@@ -337,14 +337,14 @@ const GUIDE_STEPS: GuideStep[] = [
         comment: '# Install Remotion, Three.js, Drei & Audio DSP packages',
       },
       {
-        cmd: 'npm run models:kokoro && npm run comfy:setup',
-        comment: '# Download Kokoro 82M voices + install local ComfyUI & VideoHelperSuite',
+        cmd: 'npm run models:kokoro && npm run comfy:setup && npm run studio:update',
+        comment: '# Download Kokoro 82M + install ComfyUI + keep all 4 studio layers up to date',
       },
     ],
     highlights: [
       { label: 'Node.js', value: 'v20+ & Remotion v4' },
       { label: 'ComfyUI + Wan', value: 'T2V & I2V API Workflows' },
-      { label: 'WebGL / NVENC', value: 'Hardware GPU Acceleration' },
+      { label: 'Auto-Updater', value: 'npm run studio:update + CI' },
     ],
   },
   {
@@ -377,10 +377,10 @@ const GUIDE_STEPS: GuideStep[] = [
   },
   {
     stepNumber: '03',
-    badge: 'STEP 3 // VOICEOVER & SOUND DESIGN',
-    title: 'Human Voice Blending & Sidechain SFX',
+    badge: 'STEP 3 // VOICEOVER, VOICE CLONING & SOUND DESIGN',
+    title: 'Voice Blending, Cloning & Sidechain SFX',
     subtitle:
-      'Blend Kokoro 82M voices or stream Edge Neural WordBoundary timestamps, then auto-duck music by -8.5 dB with transition SFX.',
+      'Blend Kokoro 82M voices, clone a reference voice (--clone-voice), or Whisper-align recordings (--audio-in) with -8.5 dB ducking.',
     accent: '#34d399',
     terminalTitle: 'bash — voice & sound design',
     commands: [
@@ -389,13 +389,17 @@ const GUIDE_STEPS: GuideStep[] = [
         comment: '# 80Hz HPF + 180Hz Warmth EQ + 3.6kHz Presence + Compressor',
       },
       {
+        cmd: 'python scripts/tts.py --audio-in recording.wav --out vo-aligned',
+        comment: '# Or pass --audio-in / --clone-voice ref.wav for local Whisper word alignment',
+      },
+      {
         cmd: 'python scripts/sfx.py --voiceover public/audio/vo.wav --cues "0.05:impact,3.5:whoosh" --out master',
         comment: '# 120 BPM backing track + -8.5 dB vocal sidechain ducking',
       },
     ],
     highlights: [
       { label: 'Kokoro 82M', value: 'Custom Voice Vector Blending' },
-      { label: 'Edge Neural', value: 'Millisecond Word Boundaries' },
+      { label: 'Clone & Align', value: '--clone-voice & --audio-in Whisper' },
       { label: 'Master Mix', value: '-8.5 dB Sidechain + SFX Cues' },
     ],
   },

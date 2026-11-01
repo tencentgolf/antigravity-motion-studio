@@ -160,6 +160,15 @@ python scripts/tts.py \
 npx remotion render src/index.ts SocialShort out/social-short.mp4 --props=./public/audio/voiceover-props.json
 ```
 
+### Workflow 3b: Custom Recording Ingest (`--audio-in`) & Zero-Shot Voice Cloning (`--clone-voice`)
+```bash
+# Option A: Bring your own microphone recording or VoiceStudio export (auto-applies Broadcast EQ + Whisper word alignment)
+python scripts/tts.py --audio-in path/to/my_recording.wav --out custom-vo
+
+# Option B: Clone any voice locally from a 5-15s reference WAV (via F5-TTS or ChatterboxTTS + Whisper word alignment)
+python scripts/tts.py --clone-voice path/to/my_voice_10s.wav --text "Narrated in my cloned voice." --out cloned-vo
+```
+
 ### Workflow 4: Local AI Video Generation (`ComfyUI Wan 2.1 T2V / I2V` + `AiVideoShowcase`)
 ```bash
 # 1a. Text-to-Video (auto-uses ComfyUI workflow `workflows/comfyui/wan21_t2v_api.json` if server is running, or Diffusers fallback)
