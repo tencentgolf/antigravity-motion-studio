@@ -34,6 +34,12 @@ Whenever a video requires narration or word-synced captions:
      python scripts/tts.py --engine kokoro --voice "af_heart:0.6,af_bella:0.4" --text "Your script here." --out <name>
      ```
      *(Male blend example: `"am_michael:0.7,am_fenrir:0.3"`; model files live in `models/kokoro-v1.0.onnx` and `models/voices-v1.0.bin`)*
+   * **Custom Recording / VoiceStudio Ingest (`--audio-in`) & Local Voice Cloning (`--clone-voice`):**
+     ```powershell
+     python scripts/tts.py --audio-in path/to/recording.wav --out <name>
+     python scripts/tts.py --clone-voice path/to/ref_10s.wav --text "Your script here." --out <name>
+     ```
+     *(Runs Broadcast Vocal DSP + local `faster-whisper` word-timestamp alignment automatically.)*
    * **Broadcast Polish:** Enabled by default (`80Hz` high-pass, `180Hz` warmth EQ, `3.6kHz` presence boost, soft-knee 2.5:1 compression, `-1.0 dBFS` normalization). Pass `--no-polish` only if raw unedited synthesis is needed.
 
 2. **Output Files (`public/audio/`):**

@@ -1,9 +1,13 @@
-# Core TTS & Broadcast Audio DSP
+# Core TTS, Whisper Word Alignment & Broadcast Audio DSP
 kokoro-onnx>=0.6.1
 edge-tts>=7.3.0
+faster-whisper>=1.1.0
 soundfile>=0.14.0
 numpy>=2.0.0
 scipy>=1.14.0
+
+# Optional: Zero-Shot Local Voice Cloning (--clone-voice)
+# pip install f5-tts chatterbox-tts
 
 # Optional: Local AI Video Generation (Wan 2.1 on NVIDIA RTX GPU)
 # Install PyTorch CUDA first:

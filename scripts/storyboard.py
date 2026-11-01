@@ -3,7 +3,7 @@
 Still Images + Script/Storyline -> Finished Video Builder (`scripts/storyboard.py`).
 
 Takes a list of still images (from any folder on your machine), per-scene headlines,
-and a narration script (one sentence per image), then automatically:
+and a narration script (or a pre-recorded `--audio-in` / `--clone-voice` reference), then automatically:
 1. Copies your images into `public/storyboard/<out>-<i>.<ext>`
 2. Synthesizes broadcast-polished voiceover + word timings (`scripts/tts.py`)
 3. Calculates exact scene-transition timestamps and mixes a sidechain-ducked backing
@@ -12,10 +12,10 @@ and a narration script (one sentence per image), then automatically:
 
 Usage:
   python scripts/storyboard.py \
-    --images "out/tech-explainer-preview.png,out/commercial-ad-scene2.png,out/commercial-ad-scene3.png" \
-    --headlines "1. Code-First Architecture|2. Studio 3D Hardware|3. Vector Telemetry" \
-    --script "Start with a clean TypeScript architecture. Add studio 3D lighting and physical materials. Ship cinema-grade telemetry and motion ads automatically." \
-    --brand "HYPERION" \
+    --images "docs/previews/step1-setup.png,docs/previews/step2-skills.png,docs/previews/step3-audio.png" \
+    --headlines "1. One-Minute Setup|2. Multi-Agent Skills|3. Broadcast Audio DSP" \
+    --script "Clone the studio and install dependencies in sixty seconds. Connect the skill to Gemini, Claude Code, or Codex. Then render broadcast voiceovers with automatic sidechain ducking." \
+    --brand "ANTIGRAVITY" \
     --out demo-storyboard
 """
 
@@ -29,7 +29,7 @@ from pathlib import Path
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Build a complete StoryboardAd video props package from still images + script"
+        description="Build a complete StoryboardAd video props package from still images + script or recorded voice"
     )
     parser.add_argument(
         "--images",
@@ -46,7 +46,7 @@ def main() -> None:
     parser.add_argument(
         "--script",
         type=str,
-        required=True,
+        default="Scene narration track.",
         help="Narration script with one sentence per image slide",
     )
     parser.add_argument("--brand", type=str, default="STUDIO", help="Brand/project tag")
@@ -61,6 +61,18 @@ def main() -> None:
         type=str,
         default="am_michael:0.7,am_fenrir:0.3",
         help="Voice ID or Kokoro blend",
+    )
+    parser.add_argument(
+        "--audio-in",
+        type=str,
+        default=None,
+        help="Optional pre-recorded WAV/MP3 (e.g. mic recording or VoiceStudio export) to polish & Whisper-align",
+    )
+    parser.add_argument(
+        "--clone-voice",
+        type=str,
+        default=None,
+        help="Optional 5-15s reference WAV to clone locally via F5-TTS or ChatterboxTTS",
     )
     parser.add_argument("--out", type=str, default="storyboard", help="Output base name")
     args = parser.parse_args()
@@ -99,24 +111,26 @@ def main() -> None:
             }
         )
 
-    # 1. Run TTS
+    # 1. Run TTS / Whisper Audio Alignment / Voice Cloning
     vo_name = f"{args.out}-vo"
-    subprocess.run(
-        [
-            sys.executable,
-            str(studio_root / "scripts" / "tts.py"),
-            "--engine",
-            args.engine,
-            "--voice",
-            args.voice,
-            "--text",
-            args.script,
-            "--out",
-            vo_name,
-        ],
-        cwd=str(studio_root),
-        check=True,
-    )
+    tts_cmd = [
+        sys.executable,
+        str(studio_root / "scripts" / "tts.py"),
+        "--engine",
+        args.engine,
+        "--voice",
+        args.voice,
+        "--text",
+        args.script,
+        "--out",
+        vo_name,
+    ]
+    if args.audio_in:
+        tts_cmd.extend(["--audio-in", args.audio_in])
+    if args.clone_voice:
+        tts_cmd.extend(["--clone-voice", args.clone_voice])
+
+    subprocess.run(tts_cmd, cwd=str(studio_root), check=True)
 
     vo_json_path = studio_root / "public" / "audio" / f"{vo_name}.json"
     vo_meta = json.loads(vo_json_path.read_text(encoding="utf-8"))

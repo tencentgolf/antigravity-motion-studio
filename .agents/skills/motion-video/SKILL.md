@@ -47,5 +47,7 @@ Inspect `GEMINI.md` / `CLAUDE.md` / `AGENTS.md` and use the compositions in `src
 * **`scripts/tts.py`**:
   * Local Kokoro 82M ONNX with voice blending: `--engine kokoro --voice "am_michael:0.7,am_fenrir:0.3"` or `"af_heart:0.6,af_bella:0.4"`
   * Edge Neural TTS with exact `WordBoundary` timestamps: `--engine edge --voice en-US-AndrewMultilingualNeural`
+  * External audio ingest + Whisper word alignment: `--audio-in path/to/recording.wav`
+  * Zero-shot local voice cloning + Whisper word alignment: `--clone-voice path/to/ref_10s.wav --text "..."`
 * **`scripts/sfx.py`**:
   * Mixes voiceover with a 120+ BPM electronic music bed, `-8.5 dB` automatic sidechain ducking, and frame-locked transition SFX (`impact`, `whoosh`, `shimmer`).

@@ -3,13 +3,13 @@
 Agent instructions for **Google Antigravity (Gemini)**, **Claude Code**, and **OpenAI Codex**.
 
 ## 1. Architecture Overview
-This repository is a unified, code-first motion graphics and commercial video studio powered by **Remotion v4**, **React Three Fiber (`@remotion/three` + `@react-three/drei`)**, **Local AI Video (`Wan 2.1`)**, and a **Dual-Engine TTS + Broadcast SFX/Ducking pipeline** (`scripts/tts.py` & `scripts/sfx.py`).
+This repository is a unified, code-first motion graphics and commercial video studio powered by **Remotion v4**, **React Three Fiber (`@remotion/three` + `@react-three/drei`)**, **Local AI Video (`ComfyUI` + `Wan 2.1`)**, and a **Multi-Engine TTS, Voice Cloning, Whisper Alignment + Broadcast SFX/Ducking pipeline** (`scripts/tts.py` & `scripts/sfx.py`).
 
 * **Entrypoint & Registry:** `src/index.ts` and `src/Root.tsx`
 * **Compositions (`src/compositions/`):**
   * `CommercialAd.tsx` (`1920x1080`, 30fps): Agency-style multi-scene commercial using `<TransitionSeries>`, `<CameraMotionBlur>`, `@remotion/google-fonts`, `@remotion/paths` (`evolvePath`), `@remotion/noise`, and `@react-three/drei` studio 3D materials.
   * `StoryboardAd.tsx` (`1920x1080`, 30fps): Turns any sequence of still images + a script/storyline into a voice-synced, 2.5D animated commercial with automatic transitions and kinetic lower-thirds.
-  * `StudioGuide.tsx` (`1920x1080`, 30fps): 4-step instructional onboarding video showcasing setup, multi-agent skill integration, broadcast audio + sidechain SFX, and the still-images-to-video pipeline.
+  * `StudioGuide.tsx` (`1920x1080`, 30fps): Instructional onboarding video showcasing setup, multi-agent skill integration, broadcast audio + sidechain SFX, and the still-images-to-video pipeline.
   * `TechExplainer.tsx` (`1920x1080`, 30fps): Step-by-step animated architecture diagrams & code walkthroughs.
   * `SocialShort.tsx` (`1080x1920` 9:16 vertical, 30fps): Kinetic word-by-word animated captions with an audio-reactive waveform bar.
   * `ThreeVisualizer.tsx` (`1920x1080`, 30fps): Deterministic 3D WebGL visualizer using `<ThreeCanvas>`.
@@ -29,7 +29,7 @@ python scripts/storyboard.py \
 npx remotion render src/index.ts StoryboardAd out/<slug>.mp4 --props=./public/audio/<slug>-storyboard-props.json
 ```
 
-### B. Voiceover + Broadcast EQ (`scripts/tts.py`)
+### B. Voiceover, Voice Cloning, Audio Ingest + Broadcast EQ (`scripts/tts.py`)
 * **Kokoro 82M Local ONNX (offline + custom voice blending):**
   ```bash
   python scripts/tts.py --engine kokoro --voice "am_michael:0.7,am_fenrir:0.3" --text "Your script." --out <name>
@@ -37,6 +37,11 @@ npx remotion render src/index.ts StoryboardAd out/<slug>.mp4 --props=./public/au
 * **Edge Neural TTS (exact hardware `WordBoundary` millisecond timestamps):**
   ```bash
   python scripts/tts.py --engine edge --voice en-US-AndrewMultilingualNeural --text "Your script." --out <name>
+  ```
+* **Custom Recording / VoiceStudio Ingest + Whisper Word Alignment (`--audio-in`) or Local Voice Cloning (`--clone-voice`):**
+  ```bash
+  python scripts/tts.py --audio-in path/to/recording.wav --out <name>
+  python scripts/tts.py --clone-voice path/to/ref_10s.wav --text "Your script." --out <name>
   ```
 
 ### C. Sound Design & Sidechain Ducking Mixer (`scripts/sfx.py`)
