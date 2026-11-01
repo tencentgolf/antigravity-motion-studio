@@ -21,6 +21,7 @@
     "comfy:setup": "python scripts/setup_comfyui.py",
     "comfy:serve": "python scripts/setup_comfyui.py --serve",
     "install:skill": "python scripts/install_skill.py --target all",
+    "studio:update": "python scripts/update_studio.py",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

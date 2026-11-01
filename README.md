@@ -41,6 +41,7 @@ Replace manual After Effects keyframing with deterministic **Remotion v4**, **Re
    * `scripts/sfx.py`: Procedural 120+ BPM electronic backing beat, frame-locked transition SFX (`impact`, `whoosh`, `shimmer`), and **automatic `-8.5 dB` sidechain ducking** under the voiceover.
    * `scripts/generate_video.py`: Dual-backend local AI video generator supporting **established ComfyUI Wan 2.1 workflows** (`workflows/comfyui/wan21_t2v_api.json` for Text-to-Video & `workflows/comfyui/wan21_i2v_api.json` for **Image-to-Video**) as well as standalone Hugging Face `diffusers` (`Wan-AI/Wan2.1-T2V-1.3B-Diffusers`) with optional optical-flow frame interpolation (`--fps-upsample 32`).
    * `scripts/setup_comfyui.py`: One-command installer & headless launcher (`npm run comfy:setup` / `npm run comfy:serve`) for local **ComfyUI + VideoHelperSuite**.
+   * `scripts/update_studio.py`: One-command updater (`npm run studio:update`) that upgrades `@remotion/*` packages in lockstep, updates Python packages while preserving CUDA `torch`, pulls the latest ComfyUI & custom nodes, and syncs installed global agent skills.
 
 ---
 
@@ -196,3 +197,12 @@ Once you've run `python scripts/install_skill.py --target all`, you can open **A
   > *"Take `./screenshots/dashboard.png`, `./screenshots/analytics.png`, and `./screenshots/mobile.png` and make a 15-second product promo video with this script: '...'"*
 * **Custom Explainer or Commercial:**
   > *"Create a 20-second technical explainer video showing how our authentication pipeline works and save it to `./promo.mp4`."*
+
+---
+
+## Keeping the Studio Up to Date
+
+1. **Automated GitHub Updates (`.github/dependabot.yml` + `.github/workflows/ci.yml`):**
+   * GitHub Dependabot automatically checks `npm` (`package.json`), `pip` (`requirements.txt`), and GitHub Actions weekly, grouping all `@remotion/*` packages into a single lockstep PR and running CI typechecking (`npm run typecheck` + Python validation) automatically.
+2. **One-Command Local Machine Update (`npm run studio:update`):**
+   * Run `npm run studio:update` (or `python scripts/update_studio.py`) anytime to upgrade `@remotion/*` packages in lockstep, update Python TTS/Whisper/AI packages (without overwriting your CUDA PyTorch build), pull the latest `ComfyUI` + `ComfyUI-VideoHelperSuite` commits, and re-sync your installed global agent skills.
