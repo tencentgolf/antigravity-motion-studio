@@ -18,5 +18,5 @@ accelerate>=1.2.0
 sentencepiece>=0.2.0
 ftfy>=6.2.0
 imageio>=2.36.0
-imageio-ffmpeg>=0.5.1
+imageio-ffmpeg>=0.7.0
 huggingface_hub>=0.28.0
