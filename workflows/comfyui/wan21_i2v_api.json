@@ -1,0 +1,156 @@
+{
+  "1": {
+    "inputs": {
+      "unet_name": "wan2.1_i2v_480p_14B_fp8_e4m3fn.safetensors",
+      "weight_dtype": "fp8_e4m3fn"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Wan 2.1 I2V 14B FP8 Model"
+    }
+  },
+  "2": {
+    "inputs": {
+      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+      "type": "wan",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load UMT5-XXL Text Encoder (FP8)"
+    }
+  },
+  "3": {
+    "inputs": {
+      "vae_name": "wan_2.1_vae.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load Wan 2.1 3D VAE"
+    }
+  },
+  "4": {
+    "inputs": {
+      "clip_name": "clip_vision_h.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision H (Image Conditioning)"
+    }
+  },
+  "5": {
+    "inputs": {
+      "image": "__INPUT_IMAGE__",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Source Still Image"
+    }
+  },
+  "6": {
+    "inputs": {
+      "crop": "none",
+      "clip_vision": ["4", 0],
+      "image": ["5", 0]
+    },
+    "class_type": "CLIPVisionEncode",
+    "_meta": {
+      "title": "Encode Source Image with CLIP Vision"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "__PROMPT__",
+      "clip": ["2", 0]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positive Motion Prompt"
+    }
+  },
+  "8": {
+    "inputs": {
+      "text": "__NEGATIVE_PROMPT__",
+      "clip": ["2", 0]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt"
+    }
+  },
+  "9": {
+    "inputs": {
+      "width": 832,
+      "height": 480,
+      "length": 49,
+      "batch_size": 1,
+      "positive": ["7", 0],
+      "negative": ["8", 0],
+      "vae": ["3", 0],
+      "clip_vision_output": ["6", 0],
+      "start_image": ["5", 0]
+    },
+    "class_type": "WanImageToVideo",
+    "_meta": {
+      "title": "Wan 2.1 Image-to-Video Conditioning"
+    }
+  },
+  "10": {
+    "inputs": {
+      "shift": 8.0,
+      "model": ["1", 0]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "Wan 2.1 Flow Shift (8.0)"
+    }
+  },
+  "11": {
+    "inputs": {
+      "seed": 42,
+      "steps": 30,
+      "cfg": 6.0,
+      "sampler_name": "uni_pc",
+      "scheduler": "simple",
+      "denoise": 1.0,
+      "model": ["10", 0],
+      "positive": ["9", 0],
+      "negative": ["9", 1],
+      "latent_image": ["9", 2]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Wan 2.1 I2V KSampler"
+    }
+  },
+  "12": {
+    "inputs": {
+      "samples": ["11", 0],
+      "vae": ["3", 0]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode Video Frames"
+    }
+  },
+  "13": {
+    "inputs": {
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "wan21_i2v",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": ["12", 0]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Export H.264 MP4 (VideoHelperSuite)"
+    }
+  }
+}

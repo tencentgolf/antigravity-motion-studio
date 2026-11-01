@@ -1,0 +1,50 @@
+{
+  "name": "motion-video",
+  "version": "1.0.0",
+  "description": "Code-first motion studio powered by Remotion, Three.js, and Kokoro TTS",
+  "private": true,
+  "scripts": {
+    "dev": "remotion studio",
+    "compositions": "remotion compositions",
+    "render:explainer": "remotion render TechExplainer out/tech-explainer.mp4",
+    "render:short": "remotion render SocialShort out/social-short.mp4",
+    "render:short:voiced": "remotion render SocialShort out/social-short-voiced.mp4 --props=./public/audio/voiceover-props.json",
+    "render:visualizer": "remotion render ThreeVisualizer out/three-visualizer.mp4",
+    "render:ad": "remotion render CommercialAd out/commercial-ad.mp4 --props=./public/audio/ad-master-props.json",
+    "render:storyboard": "remotion render StoryboardAd out/demo-storyboard.mp4 --props=./public/audio/demo-storyboard-storyboard-props.json",
+    "tts": "python scripts/tts.py",
+    "tts:kokoro": "python scripts/tts.py --engine kokoro --voice af_heart:0.6,af_bella:0.4 --out voiceover-kokoro",
+    "tts:edge": "python scripts/tts.py --engine edge --voice en-US-AndrewMultilingualNeural --out voiceover-edge",
+    "sfx": "python scripts/sfx.py",
+    "storyboard": "python scripts/storyboard.py",
+    "models:kokoro": "python scripts/download_kokoro.py",
+    "comfy:setup": "python scripts/setup_comfyui.py",
+    "comfy:serve": "python scripts/setup_comfyui.py --serve",
+    "install:skill": "python scripts/install_skill.py --target all",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
+    "@remotion/cli": "^4.0.539",
+    "@remotion/google-fonts": "^4.0.539",
+    "@remotion/media-utils": "^4.0.539",
+    "@remotion/motion-blur": "^4.0.539",
+    "@remotion/noise": "^4.0.539",
+    "@remotion/paths": "^4.0.539",
+    "@remotion/shapes": "^4.0.539",
+    "@remotion/three": "^4.0.539",
+    "@remotion/transitions": "^4.0.539",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.539",
+    "three": "^0.186.1",
+    "three-custom-shader-material": "^6.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@types/three": "^0.186.0",
+    "typescript": "^7.0.2"
+  }
+}

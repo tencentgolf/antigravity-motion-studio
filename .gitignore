@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Local AI & TTS Model Weights (downloaded via scripts/download_kokoro.py or Hugging Face)
+models/*.onnx
+models/*.bin
+models/*.whl
+models/*.pt
+models/*.safetensors
+vendor/ComfyUI/
+
+# Generated Audio, Video & Storyboard Assets
+public/audio/*.wav
+public/audio/*.mp3
+public/audio/*.json
+public/video/*.mp4
+public/video/*.json
+public/storyboard/*
+
+# Rendered Outputs (keep docs/previews/ tracked in git for README instructional showcase)
+out/
+!docs/previews/*.png
+!docs/previews/*.mp4
+
+# Python & OS
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+Thumbs.db
